@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fullscreen Video Redirect</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: black; /* fallback color */
+  }
+
+  /* Fullscreen video */
+  #bgVideo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+  }
+
+  /* Fade-in class */
+  .fade-in {
+    opacity: 1;
+  }
+
+  /* Optional overlay for smoother fade-out */
+  #overlay {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:black;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 1s ease-in-out;
+    z-index:2;
+  }
+</style>
+</head>
+<body>
+
+<video id="bgVideo" autoplay muted playsinline>
+  <source src="your-video.mp4" type="video/mp4">
+  Your browser does not support HTML5 video.
+</video>
+
+<div id="overlay"></div>
+
+<script>
+  const video = document.getElementById('bgVideo');
+  const overlay = document.getElementById('overlay');
+  const redirectURL = "https://niswar11.github.io/galactic/"; // <-- Change this to your URL
+
+  // Fade-in after video starts loading
+  video.addEventListener('canplay', () => {
+    video.classList.add('fade-in');
+  });
+
+  // On video end, fade-out and then redirect
+  video.addEventListener('ended', () => {
+    overlay.style.opacity = 1; // fade to black
+    setTimeout(() => {
+      window.location.href = redirectURL;
+    }, 1000); // match transition time
+  });
+
+  // Attempt autoplay on mobile
+  video.play().catch(err => {
+    console.log("Autoplay failed, user interaction may be required:", err);
+  });
+</script>
+
+</body>
+</html>
